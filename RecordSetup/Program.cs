@@ -22,9 +22,12 @@ builder.Services.AddScoped<ITableSchemaRepository, TableSchemaRepository>();
 builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<ISubRegionRecordService, SubRegionRecordService>();
 builder.Services.AddScoped<ISubRegionRecordTableService, SubRegionRecordtableService>();
+builder.Services.AddScoped<ISelectListUtilityService, SelectListUtilityService>();
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -46,5 +49,4 @@ app.UseNotyf();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
