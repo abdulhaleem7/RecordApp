@@ -47,6 +47,7 @@ namespace RecordSetup.Implementation.Servicies
             {
                 Id = id,
                 Name = region.Name,
+                 DisplayId = region.Id.ToString()[..9]
             };
             return new BaseResponse<RegionDto>
             {
@@ -70,8 +71,15 @@ namespace RecordSetup.Implementation.Servicies
             var result = getall.Select(x => new RegionDto
             {
                 Name = x.Name,
+                Id = x.Id,
+                DisplayId = x.Id.ToString()[..11]
             });
-            return new BaseResponse<IEnumerable<RegionDto>> { Data = result };
+            return new BaseResponse<IEnumerable<RegionDto>> 
+            { 
+                Data = result,
+                Status = true,
+                Message = "Regions successfully retrieved"
+            };
         }
 
         public async Task<BaseResponse<RegionDto>> Register(RegionRequestModel requestModel)

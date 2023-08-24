@@ -1,0 +1,182 @@
+﻿@using RecordSetup.Dto;
+@*
+@model IEnumerable<RegionDto>;
+*@
+<style>
+    input {
+        background-color: white !important;
+        color: black !important;
+    }
+</style>
+<div class="m-lg-5">
+    <div class="m-12">
+        <button type="button" class="btn  btn-outline btn-lg btn-primary m-2" id="addRegion" data-toggle="modal" data-target="#createModal">Add Region</button>
+    </div>
+    <div class="col-12">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">Our Regions</h6>
+            <div class="table-responsive">
+                <table id="region_table" class="">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Id</th>
+                            <th>View</th>
+                            
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--Create Modal-->
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Create Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form inside Modal -->
+                    <form id="createForm" asp-action="Register">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control" id="itemName" placeholder="Enter Region">
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-primary" value="Create" id="createButton">
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+        </div>
+    </div> 
+
+</div>
+<!-- Include Bootstrap JS and jQuery -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+@section scripts{
+
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+
+  <!--Create Script-->
+    <script>
+
+        $(document).ready(function () {
+            $("#createForm").submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+                var formData = new FormData(document.querySelector("#createForm"));
+                $.ajax({
+                    url: '@Url.Action("Register", "Region")', // Replace with the actual URL
+                    type: 'POST',
+                    data: formData, // Use the FormData object
+                    processData: false, // Prevent jQuery from processing data
+                    contentType: false, // Prevent jQuery from setting content type
+                    success: function (response) {
+                        // Handle the success response
+                        console.log(response);
+                        // Close the modal and refresh the table if needed
+                        $("#createModal").modal("hide");
+                        reloadTable('#region_table');
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle the error
+                    }
+                });
+            });
+        });
+
+    </script>
+    <!--Edit Script-->
+  <script>
+        $(document).ready(function () {
+            $("#editForm").submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+                var formData = new FormData(document.querySelector("#editForm"));
+                id;
+                $.ajax({
+                    url: `/update-region/${id}`, // Replace with the actual URL
+                    type: 'POST',
+                    data: formData, // Use the FormData object
+                    processData: false, // Prevent jQuery from processing data
+                    contentType: false, // Prevent jQuery from setting content type
+                    success: function (response) {
+                        $("#createModal").modal("hide");
+                        reloadTable('#region_table');
+                    },
+                    error: function (xhr, status, error) {
+                    }
+                });
+            });
+        });
+  </script>
+    <script>
+        $(document).ready(function () {
+            var table;
+            // Call the Ajax function on page load
+            callAjax();
+            function callAjax() {
+                if ($.fn.DataTable.isDataTable('#region_table')) {
+                    $('#region_table').DataTable().destroy();
+                }
+                table = $('#region_table').DataTable({
+                    "responsive": false, "lengthChange": false,
+                    processing: false,
+                    serverSide: false,
+                    ajax: {
+                        //url: 'DashBoardAPI/EngineTableData/' + '?' + $.param(filter),
+                        url: '@Url.Action("GetRegions","API")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: function (d) {
+
+                            d.pageNumber = Math.ceil((d.start + 1) / d.length); // calculate page number
+                            d.pageSize = d.length; 
+                            console.log(d);
+                            delete d.columns;
+                        },
+                        error: function (xhr, errorType, thrownError) {
+                            $.fn.dataTable.ext.errMode = 'throw';
+                        }
+                    },
+                    columns: [
+                        { data: 'name' , title:'Name', width:'700px'},
+                        { data: 'displayId',  title:'Id' , width:'350px'},
+                        {
+                            data: 'id',
+                            "render": function (data, type, row) {
+                                return `<a href="/regions/${data}" id="editRegion"  class="btn btn-sm border-danger btn-primary"> View </a>`
+                            }
+                        }
+                    ],
+                    pageLength: 10,
+                    searching: true,// Set default page length
+                    //lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]], // Set page length options
+                    pagingType: 'full_numbers', // Set paging type
+                    language: {
+                        emptyTable: 'No data available in table',
+                        lengthMenu: 'Show _MENU_ entries',
+                        loadingRecords: 'Loading...',
+                        processing: 'Processing...',
+                        search: 'Search:',
+                        zeroRecords: 'No matching records found'
+                        
+                    },
+                });
+            }
+        });
+        function reloadTable(tableId) {
+            $(tableId).DataTable().ajax.reload();
+        }
+
+    </script>
+  
+}

@@ -10,7 +10,7 @@ namespace RecordSetup.Interface.Servicies
 	public interface ISelectListUtilityService
 	{
 		Task<IReadOnlyCollection<SelectListItemData>> GetRegionsAsync(string? q);
-		Task<IReadOnlyCollection<SelectListItemData>> GetSubRegionSelectListAsync(string? q);
+		Task<IReadOnlyCollection<SelectListItemData>> GetSubRegionSelectListAsync(string? q, Guid? id);
         Task<IReadOnlyCollection<SelectListItemData>> GetSubRegionRecordTableAsync(string? q,Guid? id);
 		Task<IReadOnlyCollection<SelectListItemData>> GetTableSchemaAsync(string? q,Guid? id);
     }

@@ -48,7 +48,11 @@ namespace RecordSetup.Implementation.Servicies
                 Id = id,
                 Name = region.Name,
                 Description = region.Description,
-                SubRegionRecordTableName = region.SubRegionRecordTable.Name
+                SubRegionRecordTableName = region.SubRegionRecordTable.Name,
+                DisplayId = region.Id.ToString()[..11],
+                RegionName = region?.SubRegionRecordTable?.SubRegionRecord?.Region?.Name,
+                SubRegionRecordName = region?.SubRegionRecordTable?.SubRegionRecord?.Name,
+
             };
             return new BaseResponse<TableSchemaDto>
             {
@@ -73,9 +77,12 @@ namespace RecordSetup.Implementation.Servicies
             {
                 Name = x.Name,
                 Description = x.Description,
-                SubRegionRecordTableName = x.SubRegionRecordTable.Name
+                SubRegionRecordTableName = x.SubRegionRecordTable.Name,
+                DisplayId = x.Id.ToString()[..11],
+                Id = x.Id,
+                SubRegionRecordTableId = x.SubRegionRecordTableId,
             });
-            return new BaseResponse<IEnumerable<TableSchemaDto>> { Data = result };
+            return new BaseResponse<IEnumerable<TableSchemaDto>> { Data = result, Status = true, Message = "Table Schemas Successfully Retrieved..." };
         }
 
         public async Task<BaseResponse<TableSchemaDto>> Register(TableSchemaRequestModel requestModel)
@@ -106,8 +113,7 @@ namespace RecordSetup.Implementation.Servicies
                     Name = savedResponse.Name,
                     Description = savedResponse.Description,
                     SubRegionRecordTableId= savedResponse.SubRegionRecordTableId,
-                    Id = savedResponse.Id,
-                    SubRegionRecordTableName = savedResponse.SubRegionRecordTable.Name
+                    Id = savedResponse.Id
                 }
             };
         }

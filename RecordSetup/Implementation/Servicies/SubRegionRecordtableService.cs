@@ -47,7 +47,9 @@ namespace RecordSetup.Implementation.Servicies
                 Id = id,
                 Name = region.Name,
                 Description = region.Description,
-                SubRegionRecordName = region.SubRegionRecord.Name
+                SubRegionRecordName = region.SubRegionRecord.Name,
+                SubRegionRecordId = region.SubRegionRecordId,
+                DisplayId = region.Id.ToString()[..11]
             };
             return new BaseResponse<SubRegionRecordTableDto>
             {
@@ -72,9 +74,12 @@ namespace RecordSetup.Implementation.Servicies
             {
                 Name = x.Name,
                 Description = x.Description,
-                SubRegionRecordName = x.SubRegionRecord.Name
+                SubRegionRecordName = x.SubRegionRecord.Name,
+                SubRegionRecordId = x.SubRegionRecordId,
+                Id = x.Id,
+                DisplayId = x.Id.ToString()[..11]
             });
-            return new BaseResponse<IEnumerable<SubRegionRecordTableDto>> { Data = result };
+            return new BaseResponse<IEnumerable<SubRegionRecordTableDto>> { Data = result, Status = true, Message = "Sub-Region Record Tables Successfully Retrieved" };
         }
 
         public async Task<BaseResponse<SubRegionRecordTableDto>> Register(SubRegionRecordTableRequestModel regionDto)
@@ -104,9 +109,7 @@ namespace RecordSetup.Implementation.Servicies
                 {
                     Name = subRegionRecordTableSaved.Name,
                     Description = subRegionRecordTableSaved.Description,
-                    Id  = subRegionRecordTableSaved.Id,
-                    SubRegionRecordId = subRegionRecordTableSaved.SubRegionRecordId,
-                    SubRegionRecordName = subRegionRecordTableSaved.SubRegionRecord?.Name
+                    Id  = subRegionRecordTableSaved.Id
                 }
             };
         }

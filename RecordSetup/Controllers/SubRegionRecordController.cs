@@ -16,25 +16,21 @@ namespace RecordSetup.Controllers
             _notifyService = notyfService;
         }
 
-        public IActionResult Index()
+        /*public IActionResult Index()
         {
             return View();
         }
-        [HttpGet]
-        [Route("register-subregionrecord")]
-        public IActionResult Register()
-        {
-            return View();
-        }
+       */
 
         [HttpPost]
+        [Route("register-subregionrecord")]
         public async Task<IActionResult> Register(SubRegionRecordRequestModel requestModel)
         {
 
             try
             {
                 var response = await _subRegionRecordService.Register(requestModel);
-                _notifyService.Custom(response.Message, 40, "green");
+                _notifyService.Custom(response.Message, 10, "white");
                 if (response.Status)
                 {
                     return RedirectToAction("GetAll");
@@ -60,7 +56,7 @@ namespace RecordSetup.Controllers
         [HttpGet]
         [Route("subregion_records/{id}")]
 
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
@@ -68,10 +64,10 @@ namespace RecordSetup.Controllers
 
                 if (response.Status)
                 {
-                    _notifyService.Custom(response.Message, 40, "green");
+                    _notifyService.Custom(response.Message, 10, "white");
                     return View(response.Data);
                 }
-                _notifyService.Custom(response.Message, 40, "red");
+                _notifyService.Custom(response.Message, 10, "red");
                 return Content(response.Message);
             }
             catch (Exception ex)
@@ -94,10 +90,9 @@ namespace RecordSetup.Controllers
 
                 if (response.Status)
                 {
-                    _notifyService.Custom(response.Message, 40, "green");
                     return View(response.Data);
                 }
-                _notifyService.Custom(response.Message, 40, "red");
+                _notifyService.Custom(response.Message, 10, "red");
                 return Content(response.Message);
             }
             catch (Exception ex)
@@ -112,29 +107,29 @@ namespace RecordSetup.Controllers
         }
 
         [HttpPost]
-        [Route("delete-subregion_records/{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        [Route("delete-subregion_record/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _subRegionRecordService.Delete(id);
             if (result.Status)
             {
-                _notifyService.Custom(result.Message, 40, "green");
+                _notifyService.Custom(result.Message, 10, "white");
                 return RedirectToAction("GetAll");
             }
-            _notifyService.Custom(result.Message, 40, "red");
+            _notifyService.Custom(result.Message, 10, "red");
             return Content(result.Message);
         }
 
         [HttpPost("update-subregion_record/{id}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, SubRegionRecordRequestModel requestModel)
+        public async Task<IActionResult> Update(Guid id, SubRegionRecordRequestModel requestModel)
         {
             var result = await _subRegionRecordService.Update(id, requestModel);
             if (result.Status)
             {
-                _notifyService.Custom(result.Message, 40, "green");
+                _notifyService.Custom(result.Message, 10, "white");
                 return RedirectToAction("GetAll");
             }
-            _notifyService.Custom(result.Message, 40, "red");
+            _notifyService.Custom(result.Message, 10, "red");
             Content(result.Message);
             return RedirectToAction();
         }

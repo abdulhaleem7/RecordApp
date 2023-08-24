@@ -8,7 +8,7 @@ namespace RecordSetup.Interface.Repositories
     {
         public Task<List<SubRegionRecord>> GetAllSubRegion();
         public Task<SubRegionRecord> GetSubRegion(Guid id);
-        Task<IReadOnlyCollection<SelectListItemData>> LoadSubRegionForSelectAsync(string? filter);
+        Task<IReadOnlyCollection<SelectListItemData>> LoadSubRegionForSelectAsync(string? filter, Guid? id);
 
     }
 }

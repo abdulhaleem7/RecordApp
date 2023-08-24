@@ -6,7 +6,8 @@ using RecordSetup.Interface.Servicies;
 namespace RecordSetup.Controllers
 {
 
-    [Route("api/utilities"), ApiController]
+    [Route("api/[controller]")]
+    [ApiController]
     public class SelectListUtilityController : ControllerBase
     {
 
@@ -16,13 +17,12 @@ namespace RecordSetup.Controllers
             _selectListUtilityService = selectListUtilityService;
         }
 
-        [HttpGet("load-all-Region")]
-        public async Task<IActionResult> LoadAllRegionAsync([FromQuery] string? q)
+        [HttpGet]
+        [Route("load-all-region")]
+        public async Task<IActionResult> LoadAllRegion([FromQuery] string? q)
         {
             try
             {
-               
-                
                 var programss = await _selectListUtilityService.GetRegionsAsync(q);
                 return Ok(programss);
 
@@ -36,14 +36,13 @@ namespace RecordSetup.Controllers
                 });
             }
         } 
-        [HttpGet("load-all-SubRegionRecord")]
-        public async Task<IActionResult> LoadAllSubRegionRecordAsync([FromQuery] string? q)
+        [HttpGet]
+        [Route("load-all-subregionrecord")]
+        public async Task<IActionResult> LoadAllSubRegionRecord([FromQuery] string? q, Guid? id)
         {
             try
             {
-               
-                
-                var programss = await _selectListUtilityService.GetSubRegionSelectListAsync(q);
+                var programss = await _selectListUtilityService.GetSubRegionSelectListAsync(q, id);
                 return Ok(programss);
 
             }
@@ -56,8 +55,8 @@ namespace RecordSetup.Controllers
                 });
             }
         }
-        [HttpGet("load-all-SubRegionRecordTGable")]
-        public async Task<IActionResult> LoadAllSubRegionRecordTableAsync([FromQuery] string? q,Guid? id)
+        [HttpGet("load-all-subregionrecordtable")]
+        public async Task<IActionResult> LoadAllSubRegionRecordTable([FromQuery] string? q,Guid? id)
         {
             try
             {
@@ -76,7 +75,7 @@ namespace RecordSetup.Controllers
                 });
             }
         }
-         [HttpGet("load-all-TableSchema")]
+         [HttpGet("load-all-tableschema")]
         public async Task<IActionResult> LoadAllTableSchemaAsync([FromQuery] string? q,Guid? id)
         {
             try

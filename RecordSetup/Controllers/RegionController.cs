@@ -21,20 +21,21 @@ namespace RecordSetup.Controllers
             return View();
         }
         [HttpGet]
-        [Route("register-region")]
+
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("register-region")]
         public async Task<IActionResult> Register(RegionRequestModel requestModel)
         {
             
             try
             {
                 var response = await _regionService.Register(requestModel);
-                _notifyService.Custom(response.Message, 40, "green");
+                _notifyService.Custom(response.Message, 10, "white");
                 if (response.Status)
                 {
                     return RedirectToAction("GetAll");
@@ -57,7 +58,7 @@ namespace RecordSetup.Controllers
         [HttpGet]
         [Route("regions/{id}")]
 
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
@@ -65,7 +66,7 @@ namespace RecordSetup.Controllers
 
                 if (response.Status)
                 {
-                    _notifyService.Custom(response.Message, 40, "green");
+                    _notifyService.Custom(response.Message, 10, "white");
                     return View(response.Data);
                 }
 
@@ -83,37 +84,19 @@ namespace RecordSetup.Controllers
         }
         [Route("regions")]
         [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            try
-            {
-                var response = await _regionService.GetAll();
-                if (response.Status)
-                {
-                    return View(response.Data);
-                }
-                _notifyService.Custom(response.Message, 40, "red");
-                return Content(response.Message);
-            }
-            catch (Exception ex)
-            {
-                return Ok(new
-                {
-                    status = "error",
-                    message = $"Something happened. Please try again later.{ex.InnerException}"
-                });
-            }
-
+        public IActionResult GetAll()
+        { 
+            return View();
         }
 
         [HttpPost]
         [Route("delete-region/{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _regionService.Delete(id);
             if(result.Status)
             {
-                _notifyService.Custom(result.Message, 40, "green");
+                _notifyService.Custom(result.Message, 10, "white");
                 return RedirectToAction("GetAll");
             }
             _notifyService.Custom(result.Message, 40, "red");
@@ -121,12 +104,12 @@ namespace RecordSetup.Controllers
         }
         
         [HttpPost("update-region/{id}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, RegionRequestModel requestModel)
+        public async Task<IActionResult> Update(Guid id, RegionRequestModel requestModel)
         {
             var result = await _regionService.Update(id, requestModel);
             if(result.Status)
             {
-                _notifyService.Custom(result.Message, 40, "green");
+                _notifyService.Custom(result.Message, 40, "white");
                 return RedirectToAction("GetAll");
             }
             _notifyService.Custom(result.Message, 40, "red");

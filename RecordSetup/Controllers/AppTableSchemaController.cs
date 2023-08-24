@@ -5,32 +5,26 @@ using RecordSetup.Interface.Servicies;
 
 namespace RecordSetup.Controllers
 {
-    public class TableSchemaController : Controller
+    public class AppTableSchemaController : Controller
     {
 
         private readonly ITableSchemaService _tableSchemaService;
         private readonly INotyfService _notifyService;
-        public TableSchemaController(ITableSchemaService tableSchemaService, INotyfService notyfService)
+        public AppTableSchemaController(ITableSchemaService tableSchemaService, INotyfService notyfService)
         {
             _tableSchemaService = tableSchemaService;
             _notifyService = notyfService;
         }
 
-        [HttpGet]
-        [Route("register-tableschema")]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
         [HttpPost]
+        [Route("register-tableschema")]
         public async Task<IActionResult> Register(TableSchemaRequestModel requestModel)
         {
 
             try
             {
                 var response = await _tableSchemaService.Register(requestModel);
-                _notifyService.Custom(response.Message, 40, "green");
+                _notifyService.Custom(response.Message, 10, "white");
                 if (response.Status)
                 {
                     return RedirectToAction("GetAll");
@@ -56,7 +50,7 @@ namespace RecordSetup.Controllers
         [HttpGet]
         [Route("table_schemas/{id}")]
 
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get( Guid id)
         {
             try
             {
@@ -64,10 +58,10 @@ namespace RecordSetup.Controllers
 
                 if (response.Status)
                 {
-                    _notifyService.Custom(response.Message, 40, "green");
+                    _notifyService.Custom(response.Message, 10, "white");
                     return View(response.Data);
                 }
-                _notifyService.Custom(response.Message, 40, "red");
+                _notifyService.Custom(response.Message, 10, "red");
                 return Content(response.Message);
             }
             catch (Exception ex)
@@ -80,7 +74,7 @@ namespace RecordSetup.Controllers
             }
 
         }
-        [Route("table-schemas")]
+        [Route("app_table_schemas")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -90,10 +84,9 @@ namespace RecordSetup.Controllers
 
                 if (response.Status)
                 {
-                    _notifyService.Custom(response.Message, 40, "green");
                     return View(response.Data);
                 }
-                _notifyService.Custom(response.Message, 40, "red");
+                _notifyService.Custom(response.Message, 10, "red");
                 return Content(response.Message);
             }
             catch (Exception ex)
@@ -108,29 +101,29 @@ namespace RecordSetup.Controllers
         }
 
         [HttpPost]
-        [Route("table_schemas/{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        [Route("delete-table_schemas/{id}")]
+        public async Task<IActionResult> Delete( Guid id)
         {
             var result = await _tableSchemaService.Delete(id);
             if (result.Status)
             {
-                _notifyService.Custom(result.Message, 40, "green");
+                _notifyService.Custom(result.Message, 10, "white");
                 return RedirectToAction("GetAll");
             }
-            _notifyService.Custom(result.Message, 40, "red");
+            _notifyService.Custom(result.Message, 10, "red");
             return Content(result.Message);
         }
 
         [HttpPost("update-table_schemas/{id}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, TableSchemaRequestModel requestModel)
+        public async Task<IActionResult> Update( Guid id, TableSchemaRequestModel requestModel)
         {
             var result = await _tableSchemaService.Update(id, requestModel);
             if (result.Status)
             {
-                _notifyService.Custom(result.Message, 40, "green");
+                _notifyService.Custom(result.Message, 10, "white");
                 return RedirectToAction("GetAll");
             }
-            _notifyService.Custom(result.Message, 40, "red");
+            _notifyService.Custom(result.Message, 10, "red");
             Content(result.Message);
             return RedirectToAction();
         }

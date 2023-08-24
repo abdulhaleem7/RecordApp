@@ -28,8 +28,8 @@ public class SelectListUtilityService : ISelectListUtilityService
         _subRegionRecordTableService.LoadSubRegionRecordTableForSelectAsync(q,id);
 
 
-    public Task<IReadOnlyCollection<SelectListItemData>> GetSubRegionSelectListAsync(string? q) =>
-        _subRegionRecordService.LoadSubRegionForSelectAsync(q);
+    public Task<IReadOnlyCollection<SelectListItemData>> GetSubRegionSelectListAsync(string? q, Guid? id) =>
+        _subRegionRecordService.LoadSubRegionForSelectAsync(q, id);
 
     public Task<IReadOnlyCollection<SelectListItemData>> GetTableSchemaAsync(string? q, Guid? id) =>
         _tableSchemaService.LoadTableSchemaForSelectAsync(q,id);

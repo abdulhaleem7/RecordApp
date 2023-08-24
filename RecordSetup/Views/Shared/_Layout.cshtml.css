@@ -46,3 +46,15 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+a {
+    text-decoration: none !important; 
+    color: white !important; 
+    transition: color 0.3s ease !important; 
+}
+dt {
+    font-weight: bolder !important;
+    font-size: 1.5em !important;
+}
+
+
+    

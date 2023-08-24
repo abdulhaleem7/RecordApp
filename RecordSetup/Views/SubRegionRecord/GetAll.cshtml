@@ -1,0 +1,202 @@
+﻿@using RecordSetup.Dto;
+@*
+@model IEnumerable<RegionDto>;
+*@
+<style>
+    input,textarea{
+        background-color: white !important;
+        color: black !important;
+    }
+    label{
+        color: black;
+    }
+</style>
+<div class="m-lg-5">
+    <div class="m-12">
+        <button type="button" class="btn  btn-outline btn-lg btn-primary m-2" id="addRegion" data-toggle="modal" data-target="#createModal">Add Sub-Region</button>
+    </div>
+    <div class="col-12">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">Our Sub-Region Records</h6>
+            <div class="table-responsive">
+                <table id="sub-region_table" class="">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Id</th>
+                            <th>Description</th>
+                            <th>Region Name</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--Create Modal-->
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Create Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form inside Modal -->
+                    <form id="createSubRegionRecordForm" asp-action="Register">
+
+                        <div class="form-group row mt-3" style="padding:12px;">
+                            <div class="form-group col-md-7">
+                                <div>
+                                    <label>Select Region</label>
+                                </div>
+                                <div class="searchable-dropdown">
+                                    <select id="dropdown-select" class="form-control regionSelect"
+                                            placeholder="Choose Region"
+                                            required="required"
+                                            name="regionId">
+                                            <option disabled></option>
+                                            <option disabled>--Select Region--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label>Name</label>
+                                <input type="text" id="subRegionName" name="name" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label>Description</label>
+                                <textarea type="text" id="subRegionName" name="description" class="form-control" required>
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-primary" value="Create" id="createButton">
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Include Bootstrap JS and jQuery -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>@*
+<script src="~/yassets/assets/initialize-select-lists.js"></script>*@
+@section scripts{
+    
+   <script>
+       //document.querySelector("")
+    $(document).ready(function()
+    {
+            $.ajax({
+                url: '/api/SelectListUtility/load-all-region',
+                type: 'GET',
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log(response);
+                    Array.from(response).forEach(r =>
+                    {
+                       document.querySelector("#dropdown-select").innerHTML +=`<option value="${r.id}">${r.name}</option>`
+                    })
+                },
+                error: function (xhr, status, error) {
+                }
+            });
+    })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#createSubRegionRecordForm").submit(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+                var formData = new FormData(document.querySelector("#createSubRegionRecordForm"));
+               console.log(formData.get("regionId"))
+                $.ajax({
+                    url: '@Url.Action("Register", "SubRegionRecord")', // Replace with the actual URL
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log(response);
+                        $("#createModal").modal("hide");
+                        reloadTable('#sub-region_table');
+                    },
+                    error: function (xhr, status, error) {
+                    }
+                });
+            });
+        });
+
+    </script>
+    
+    <script>
+        $(document).ready(function () {
+            var table;
+            // Call the Ajax function on page load
+            callAjax();
+            function callAjax() {
+                if ($.fn.DataTable.isDataTable('#sub-region_table')) {
+                    $('#sub-region_table').DataTable().destroy();
+                }
+                table = $('#sub-region_table').DataTable({
+                    "responsive": false, 
+                    "lengthChange": false,
+                    processing: false,
+                    serverSide: false,
+                    ajax: {
+                        url: '@Url.Action("GetSubRegionRecords","API")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: function (d) {
+                            d.pageNumber = Math.ceil((d.start + 1) / d.length); // calculate page number
+                            d.pageSize = d.length;
+                            console.log(d);
+                            delete d.columns;
+                        },
+                        error: function (xhr, errorType, thrownError) {
+                            $.fn.dataTable.ext.errMode = 'throw';
+                        }
+                    },
+                    columns: [
+                        { data: 'name', title: 'Name', width: '700px' },
+                        { data: 'displayId', title: 'Id', width: '350px' },
+                        { data: 'description', title: 'Description', width: '350px' },
+                        { data: 'regionName', title: 'Region Name', width: '350px' },
+                        {
+                            data: 'id',
+                            "render": function (data, type, row) {
+                                return `<a href="/subregion_records/${data}" id="editRegion"  class="btn btn-sm border-danger btn-primary"> View </a>`
+                            }
+                        }
+                    ],
+                    pageLength: 10,
+                    searching: true,// Set default page length
+                    //lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]], // Set page length options
+                    pagingType: 'full_numbers', // Set paging type
+                    language: {
+                        emptyTable: 'No data available in table',
+                        lengthMenu: 'Show _MENU_ entries',
+                        loadingRecords: 'Loading...',
+                        processing: 'Processing...',
+                        search: 'Search:',
+                        zeroRecords: 'No matching records found'
+
+                    },
+                });
+            }
+        });
+        function reloadTable(tableId) {
+            $(tableId).DataTable().ajax.reload();
+        }
+
+    </script>
+
+}

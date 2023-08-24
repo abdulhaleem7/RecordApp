@@ -47,12 +47,14 @@ namespace RecordSetup.Implementation.Servicies
                 Id = id,
                 Name = region.Name,
                 Description = region.Description,
-                RegionName = region.Region.Name
+                RegionName = region.Region.Name,
+                DisplayId = region.Id.ToString()[..11],
+                RegionId = region.RegionId,
             };
             return new BaseResponse<SubRegionRecordDto>
             {
                 Data = regionDto,
-                Message = "Successful",
+                Message = "Successful Retrieval",
                 Status = true
             };
         }
@@ -72,9 +74,12 @@ namespace RecordSetup.Implementation.Servicies
             {
                 Name = x.Name,
                 Description= x.Description,
-                RegionName = x.Region.Name
+                RegionName = x.Region.Name,
+                DisplayId = x.Id.ToString()[..11],
+                Id = x.Id,
+                RegionId = x.RegionId,
             });
-            return new BaseResponse<IEnumerable<SubRegionRecordDto>> { Data = result };
+            return new BaseResponse<IEnumerable<SubRegionRecordDto>> { Data = result, Status = true, Message = "Sub-Region Records Successfully Retrieved" };
         }
 
         public async Task<BaseResponse<SubRegionRecordDto>> Register(SubRegionRecordRequestModel regionDto)
@@ -105,8 +110,9 @@ namespace RecordSetup.Implementation.Servicies
                     Name = responseSaved.Name,  
                     Description = responseSaved.Description,
                     RegionId = responseSaved.RegionId,
-                    RegionName = responseSaved.Region.Name,
-                    Id = responseSaved.Id    
+                    Id = responseSaved.Id,
+                    DisplayId = responseSaved.Id.ToString()[..11],
+
                 }
             };
         }
