@@ -15,15 +15,15 @@
     </div> &nbsp;
     <div class="col-12">
         <div class="bg-secondary rounded h-100 p-4">
-            <h6 class="mb-4">Our Table Schemas</h6>
+            <h6 class="mb-4">List Of Table Fields</h6>
             <div class="table-responsive">
                 <table id="table_schema" class="">
                     <thead>
                         <tr>
+                            <th>Region</th>
+                            <th>Country</th>
+                            <th>Table</th>
                             <th>Name</th>
-                            <th>Id</th>
-                            <th>Description</th>
-                            <th>Sub-Region Record Table</th>
                             <th>View</th>
                         </tr>
                     </thead>
@@ -170,7 +170,7 @@
             //SubRegionRecordTable Dropdown
             subRegionDropdownSelect.addEventListener('change', () => {
 
-                subRegionTableDropdownSelect.innerHTML = `<option disabled>--Select Sub-Region Table--</option>`;
+                subRegionTableDropdownSelect.innerHTML = `<option disabled>Select Record Table</option>`;
                 $.ajax({
                     url: `/api/SelectListUtility/load-all-subregionrecordtable?id=${subRegionDropdownSelect.value}`,
                     type: 'GET',
@@ -182,9 +182,6 @@
                         //if (responseArray.length !== 0) {
                         //    subRegionTableDropdownSelect.value = responseArray[0].id;
                         //}
-                        if (responseArray.length === 0) {
-                            subRegionTableDropdownSelect.innerHTML += `<option disabled>${subRegionDropdownSelect.value} Has No S-R.Table</option>`
-                        }
                         responseArray.forEach(r => {
                             subRegionTableDropdownSelect.innerHTML += `<option value="${r.id}">${r.name}</option>`
                         })
@@ -250,10 +247,10 @@
                         }
                     },
                     columns: [
-                        { data: 'name', title: 'Name', width: '700px' },
-                        { data: 'displayId', title: 'Id', width: '350px' },
-                        { data: 'description', title: 'Description', width: '350px' },
-                        { data: 'subRegionRecordTableName', title: 'Sub-Region Record Table', width: '350px' },
+                        { data: 'regionName',  width: '700px' },
+                        { data: 'subRegionRecordName',  width: '350px' },
+                        { data: 'subRegionRecordTableName', title: 'Description', width: '350px' },
+                        { data: 'name', title: 'Sub-Region Record Table', width: '350px' },
                         {
                             data: 'id',
                             "render": function (data, type, row) {

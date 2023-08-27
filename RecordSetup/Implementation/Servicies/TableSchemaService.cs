@@ -81,6 +81,32 @@ namespace RecordSetup.Implementation.Servicies
                 DisplayId = x.Id.ToString()[..11],
                 Id = x.Id,
                 SubRegionRecordTableId = x.SubRegionRecordTableId,
+                RegionName = x.SubRegionRecordTable.SubRegionRecord.Region.Name,
+                SubRegionRecordName = x.SubRegionRecordTable.SubRegionRecord.Name
+            });
+            return new BaseResponse<IEnumerable<TableSchemaDto>> { Data = result, Status = true, Message = "Table Schemas Successfully Retrieved..." };
+        }
+        public async Task<BaseResponse<IEnumerable<TableSchemaDto>>> GetAllTableSchemaAsyncByTableId(Guid? id)
+        {
+            var getall = await _tableSchemaRepository.GetAllTableSchemaAsyncByTableId(id);
+            if (getall == null)
+            {
+                return new BaseResponse<IEnumerable<TableSchemaDto>>
+                {
+                    Message = "No record Found",
+                    Status = false
+                };
+            }
+            var result = getall.Select(x => new TableSchemaDto
+            {
+                Name = x.Name,
+                Description = x.Description,
+                SubRegionRecordTableName = x.SubRegionRecordTable.Name,
+                DisplayId = x.Id.ToString()[..11],
+                Id = x.Id,
+                SubRegionRecordTableId = x.SubRegionRecordTableId,
+                RegionName = x.SubRegionRecordTable.SubRegionRecord.Region.Name,
+                SubRegionRecordName = x.SubRegionRecordTable.SubRegionRecord.Name,
             });
             return new BaseResponse<IEnumerable<TableSchemaDto>> { Data = result, Status = true, Message = "Table Schemas Successfully Retrieved..." };
         }

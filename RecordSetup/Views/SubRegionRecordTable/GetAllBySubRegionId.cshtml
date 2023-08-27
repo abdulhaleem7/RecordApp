@@ -1,0 +1,108 @@
+﻿@using RecordSetup.Dto;
+@model SubRegionRecordDto;
+<style>
+    input, textarea {
+        background-color: white !important;
+        color: black !important;
+    }
+
+    label {
+        color: black;
+    }
+</style>
+<div class="m-lg-5">
+   
+    <div class="col-12">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">List Of @Model.Name Tables</h6>
+            <div class="table-responsive">
+                <table id="sub-region_record_table" class="">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Region</th>
+                            <th>Sub-Region</th>
+                            <th>View</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--Create Modal-->
+    
+
+</div>
+<!-- Include Bootstrap JS and jQuery -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>@*
+<script src="~/yassets/assets/initialize-select-lists.js"></script>*@
+@section scripts{
+
+
+    <script>
+        $(document).ready(function () {
+            var pathSegments = window.location.pathname.split('/');
+            var id = pathSegments[pathSegments.length - 1];
+            var table;
+            // Call the Ajax function on page load
+            callAjax(id);
+            function callAjax(id) {
+                if ($.fn.DataTable.isDataTable('#sub-region_record_table')) {
+                    $('#sub-region_record_table').DataTable().destroy();
+                }
+                table = $('#sub-region_record_table').DataTable({
+                    "responsive": false,
+                    "lengthChange": false,
+                    processing: false,
+                    serverSide: false,
+                    ajax: {
+                        url: '@Url.Action("GetSubRegionRecordTablesById", "API")' + '?id=' + id,
+                        type: 'GET',
+                        dataType: 'json',
+                        data: function (d) {
+                            d.pageNumber = Math.ceil((d.start + 1) / d.length); // calculate page number
+                            d.pageSize = d.length;
+                            console.log(d);
+                            delete d.columns;
+                        },
+                        error: function (xhr, errorType, thrownError) {
+                            $.fn.dataTable.ext.errMode = 'throw';
+                        }
+                    },
+                    columns: [
+                        { data: 'name', width: '700px' },
+                        { data: 'regionName', width: '700px' },
+                        { data: 'subRegionRecordName', width: '350px' },
+                        {
+                            data: 'id',
+                            "render": function (data, type, row) {
+                                return `<a href="/Table-details/${data}" id="editRegion"  class="btn btn-sm border-danger btn-primary"> View </a>`
+                            }
+                        }
+                    ],
+                    pageLength: 10,
+                    searching: true,// Set default page length
+                    //lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]], // Set page length options
+                    pagingType: 'full_numbers', // Set paging type
+                    language: {
+                        emptyTable: 'No data available in table',
+                        lengthMenu: 'Show _MENU_ entries',
+                        loadingRecords: 'Loading...',
+                        processing: 'Processing...',
+                        search: 'Search:',
+                        zeroRecords: 'No matching records found'
+
+                    },
+                });
+            }
+        });
+        function reloadTable(tableId) {
+            $(tableId).DataTable().ajax.reload();
+        }
+
+    </script>
+
+}

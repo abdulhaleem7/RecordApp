@@ -14,13 +14,12 @@
     </div>
     <div class="col-12">
         <div class="bg-secondary rounded h-100 p-4">
-            <h6 class="mb-4">Our Regions</h6>
+            <h6 class="mb-4">List of Region Table</h6>
             <div class="table-responsive">
                 <table id="region_table" class="">
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Id</th>
                             <th>View</th>
                             
                         </tr>
@@ -149,7 +148,6 @@
                     },
                     columns: [
                         { data: 'name' , title:'Name', width:'700px'},
-                        { data: 'displayId',  title:'Id' , width:'350px'},
                         {
                             data: 'id',
                             "render": function (data, type, row) {

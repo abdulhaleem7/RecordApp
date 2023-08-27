@@ -9,11 +9,15 @@ namespace RecordSetup.Controllers
     {
 
         private readonly ISubRegionRecordTableService _subRegionRecordTableService;
+        private readonly ISubRegionRecordService _subRegionRecordService;
         private readonly INotyfService _notifyService;
-        public SubRegionRecordTableController(ISubRegionRecordTableService subRegionRecordTableService, INotyfService notyfService)
+        public SubRegionRecordTableController(ISubRegionRecordTableService subRegionRecordTableService,
+                                              INotyfService notyfService,
+                                              ISubRegionRecordService subRegionRecordService)
         {
             _subRegionRecordTableService = subRegionRecordTableService;
             _notifyService = notyfService;
+            _subRegionRecordService = subRegionRecordService;
         }
 
         [HttpPost]
@@ -87,6 +91,30 @@ namespace RecordSetup.Controllers
                     return View(response.Data);
                 }
                 _notifyService.Custom(response.Message, 10, "red");
+                return Content(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    status = "error",
+                    message = $"Something happened. Please try again later.{ex.InnerException}"
+                });
+            }
+
+        }
+        [Route("view-Tables/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllBySubRegionId(Guid id)
+        {
+            try
+            {
+                var response = await _subRegionRecordService.Get(id);
+
+                if (response.Status)
+                {
+                    return View(response.Data);
+                }
                 return Content(response.Message);
             }
             catch (Exception ex)

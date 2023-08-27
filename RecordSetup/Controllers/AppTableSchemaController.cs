@@ -8,12 +8,16 @@ namespace RecordSetup.Controllers
     public class AppTableSchemaController : Controller
     {
 
+        private readonly ISubRegionRecordTableService _subRegionRecordTableService;
         private readonly ITableSchemaService _tableSchemaService;
         private readonly INotyfService _notifyService;
-        public AppTableSchemaController(ITableSchemaService tableSchemaService, INotyfService notyfService)
+        public AppTableSchemaController(ITableSchemaService tableSchemaService, 
+                                        INotyfService notyfService,
+                                        ISubRegionRecordTableService subRegionRecordTableService)
         {
             _tableSchemaService = tableSchemaService;
             _notifyService = notyfService;
+            _subRegionRecordTableService = subRegionRecordTableService;
         }
 
         [HttpPost]
@@ -86,7 +90,6 @@ namespace RecordSetup.Controllers
                 {
                     return View(response.Data);
                 }
-                _notifyService.Custom(response.Message, 10, "red");
                 return Content(response.Message);
             }
             catch (Exception ex)
@@ -98,6 +101,29 @@ namespace RecordSetup.Controllers
                 });
             }
 
+        }
+        [Route("Table-details/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllTableSchemaAsyncByTableId(Guid id)
+        {
+            try
+            {
+                var response = await _subRegionRecordTableService.Get(id);
+
+                if (response.Status)
+                {
+                    return View(response.Data);
+                }
+                return Content(response.Message);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    status = "error",
+                    message = $"Something happened. Please try again later.{ex.InnerException}"
+                });
+            }
         }
 
         [HttpPost]

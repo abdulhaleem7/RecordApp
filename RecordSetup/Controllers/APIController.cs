@@ -27,7 +27,6 @@ namespace RecordSetup.Controllers
         {
             
             var response = await _regionService.GetAll();
-            if(response.Status) _notifyService.Custom(response.Message, 10, "white");
             return Ok(new
             {
                 message = response.Message,
@@ -40,7 +39,6 @@ namespace RecordSetup.Controllers
         {
             
             var response = await _subRegionRecordService.GetAll();
-            if(response.Status) _notifyService.Custom(response.Message, 10, "white");
             return Ok(new
             {
                 message = response.Message,
@@ -54,7 +52,30 @@ namespace RecordSetup.Controllers
         {
             
             var response = await _subRegionRecordTableService.GetAll();
-            if(response.Status) _notifyService.Custom(response.Message, 10, "white");
+            return Ok(new
+            {
+                message = response.Message,
+                data = response.Data,
+                status = response.Status
+            });
+        } 
+        [Route("view-Tables")]
+        public async Task<IActionResult> GetSubRegionRecordTablesById(Guid? id)
+        {
+            
+            var response = await _subRegionRecordTableService.GetAllSubregionRecordByRegionIdTable(id);
+            return Ok(new
+            {
+                message = response.Message,
+                data = response.Data,
+                status = response.Status
+            });
+        } 
+         [Route("Table-details")]
+        public async Task<IActionResult> GetAllTableSchemaAsyncByTableId(Guid? id)
+        {
+            
+            var response = await _tableSchemaService.GetAllTableSchemaAsyncByTableId(id);
             return Ok(new
             {
                 message = response.Message,
@@ -68,7 +89,6 @@ namespace RecordSetup.Controllers
         {
             
             var response = await _tableSchemaService.GetAll();
-            if(response.Status) _notifyService.Custom(response.Message, 10, "white");
             return Ok(new
             {
                 message = response.Message,

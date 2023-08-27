@@ -64,10 +64,8 @@ namespace RecordSetup.Controllers
 
                 if (response.Status)
                 {
-                    _notifyService.Custom(response.Message, 10, "white");
                     return View(response.Data);
                 }
-                _notifyService.Custom(response.Message, 10, "red");
                 return Content(response.Message);
             }
             catch (Exception ex)
@@ -92,7 +90,6 @@ namespace RecordSetup.Controllers
                 {
                     return View(response.Data);
                 }
-                _notifyService.Custom(response.Message, 10, "red");
                 return Content(response.Message);
             }
             catch (Exception ex)

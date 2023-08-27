@@ -13,19 +13,19 @@
 </style>
 <div class="m-lg-5">
     <div class="m-12">
-        <button type="button" class="btn  btn-outline btn-lg btn-primary m-2" id="addRegion" data-toggle="modal" data-target="#createModal">Add Sub-Region</button>
+        <button type="button" class="btn  btn-outline btn-lg btn-primary m-2" id="addRegion" data-toggle="modal" data-target="#createModal">Add Country</button>
     </div>
     <div class="col-12">
         <div class="bg-secondary rounded h-100 p-4">
-            <h6 class="mb-4">Our Sub-Region Records</h6>
+            <h6 class="mb-4">List Of Country</h6>
             <div class="table-responsive">
                 <table id="sub-region_table" class="">
                     <thead>
                         <tr>
+                            <th>tables</th>
                             <th>Name</th>
-                            <th>Id</th>
-                            <th>Description</th>
                             <th>Region Name</th>
+                            <th>Description</th>
                             <th>View</th>
                         </tr>
                     </thead>
@@ -166,10 +166,15 @@
                         }
                     },
                     columns: [
+                        {
+                            data: 'id', width: '200px',
+                            "render": function (data, type, row) {
+                                return `<a href="/view-Tables/${data}" id="getRegion"  class="btn btn-sm border-danger btn-primary">Tables</a>`
+                            }
+                        },
                         { data: 'name', title: 'Name', width: '700px' },
-                        { data: 'displayId', title: 'Id', width: '350px' },
-                        { data: 'description', title: 'Description', width: '350px' },
                         { data: 'regionName', title: 'Region Name', width: '350px' },
+                        { data: 'description', title: 'Description', width: '350px' },
                         {
                             data: 'id',
                             "render": function (data, type, row) {

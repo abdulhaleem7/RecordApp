@@ -30,35 +30,53 @@
         <div class="card-header">
             <h3 class="card-title align-center">
                 <i class="fas fa-text-width"></i>
-                Sub-Region Table Data
+               Country Table Detail
             </h3>
         </div>
 
         <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="col-sm-4">Name</th>
+                            <td class="col-sm-8">@Model.Name</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="col-sm-4">Region</th>
+                            <td class="col-sm-8">@Model.RegionName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="col-sm-4">SubRegion</th>
+                            <td class="col-sm-8">@Model.SubRegionRecordName</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="col-sm-4">Description</th>
+                            <td class="col-sm-8">@Model.Description</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <form id="editForm" asp-action="Update" asp-route-id="@Model.Id">
-                <div class="form-group">
-                    <dt class="col-sm-4">Display Id</dt>
-                    <dd class="col-sm-8">@Model.DisplayId</dd>
-                    <dt class="col-sm-4">ID:</dt>
-                    <dd class="col-sm-8">@Model.Id</dd>
-                    <dt class="col-sm-4">Sub-Region ID:</dt>
-                    <dd class="col-sm-8">@Model.SubRegionRecordId</dd>
-                    <dt class="col-sm-4">Sub Region:</dt>
-                    <dd class="col-sm-8">@Model.SubRegionRecordName</dd>
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Edit Details</h5>
+                        <div class="form-group">
+                            <label for="editName">Name</label>
+                            <input type="text" class="form-control" value="@Model.Name" name="name" id="editName" placeholder="Enter Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="editDescription">Description</label>
+                            <input type="text" class="form-control" value="@Model.Description" name="description" id="editDescription" placeholder="Enter Description">
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary" id="saveChanges">Save Changes</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteSubRegion('@Model.Id')">Delete</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" value="@Model.Name" name="name" id="editRegion" placeholder="@Model.Name">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" value="@Model.Description" name="description" id="editRegion" placeholder="@Model.Description">
-                </div>
-                <span class="modal-footer">
-                    <button type="submit" class="btn btn-primary" id="saveChanges">Save Changes</button>
-                </span>
             </form>
-            <span class="modal-footer">
-                <button type="submit" class="btn btn-danger" onclick="deleteSubRegion('@Model.Id')"> Delete</button>
-            </span>
+            
         </div>
     </div>
 </div>

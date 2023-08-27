@@ -18,6 +18,11 @@ namespace RecordSetup.Implementation.Repositories
             return await _context.TableSchemas.Include(x=>x.SubRegionRecordTable)
                 .ThenInclude(x => x.SubRegionRecord).ThenInclude(x => x.Region).ToListAsync();
         }
+         public async Task<List<TableSchema>> GetAllTableSchemaAsyncByTableId(Guid? id)
+        {
+            return await _context.TableSchemas.Include(x=>x.SubRegionRecordTable)
+                .ThenInclude(x => x.SubRegionRecord).ThenInclude(x => x.Region).Where(x=>x.SubRegionRecordTable.Id == id).ToListAsync();
+        }
 
         public async Task<TableSchema> GetTableSchemaAsync(Guid id)
         {

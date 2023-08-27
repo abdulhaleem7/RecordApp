@@ -66,7 +66,6 @@ namespace RecordSetup.Controllers
 
                 if (response.Status)
                 {
-                    _notifyService.Custom(response.Message, 10, "white");
                     return View(response.Data);
                 }
 
@@ -96,7 +95,6 @@ namespace RecordSetup.Controllers
             var result = await _regionService.Delete(id);
             if(result.Status)
             {
-                _notifyService.Custom(result.Message, 10, "white");
                 return RedirectToAction("GetAll");
             }
             _notifyService.Custom(result.Message, 40, "red");

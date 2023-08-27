@@ -10,6 +10,7 @@ namespace RecordSetup.Dto
         public string? Description { get; set; }
         public string SubRegionRecordName { get; set; }
         public Guid SubRegionRecordId { get; set; }
+        public string RegionName { get; set; }
     }
 
     public class SubRegionRecordTableRequestModel

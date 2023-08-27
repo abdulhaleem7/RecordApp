@@ -9,5 +9,6 @@ namespace RecordSetup.Interface.Servicies
         Task<BaseResponse<TableSchemaDto>> Get(Guid id);
         Task<BaseResponse<IEnumerable<TableSchemaDto>>> GetAll();
         Task<BaseResponse<TableSchemaDto>> Update(Guid id, TableSchemaRequestModel requestModel);
+        Task<BaseResponse<IEnumerable<TableSchemaDto>>> GetAllTableSchemaAsyncByTableId(Guid? id);
     }
 }

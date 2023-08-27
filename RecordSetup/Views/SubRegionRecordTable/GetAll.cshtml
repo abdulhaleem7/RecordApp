@@ -18,15 +18,14 @@
     </div> &nbsp;
     <div class="col-12">
         <div class="bg-secondary rounded h-100 p-4">
-            <h6 class="mb-4">Our Sub-Region Record Tables</h6>
+            <h6 class="mb-4">List Of Country Tables</h6>
             <div class="table-responsive">
                 <table id="sub-region_record_table" class="">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Id</th>
-                            <th>Description</th>
-                            <th>Sub-Region Record</th>
+                            <th>Region</th>
+                            <th>Country</th>
+                            <th>Table</th>
                             <th>View</th>
                         </tr>
                     </thead>
@@ -56,7 +55,6 @@
                                 <div class="searchable-dropdown">
                                     <select id="region-dropdown-select" class="form-control"
                                             placeholder="Choose Region">
-                                        <option disabled></option>
                                         <option disabled>--Select Region--</option>
                                     </select>
                                 </div>
@@ -76,7 +74,7 @@
                             </div>
                             <div class="form-group col-md-5">
                                 <label>Name</label>
-                                <input type="text"  name="name" class="form-control" required>
+                                <input type="text" name="name" class="form-control" required>
                             </div>
                             <div class="form-group col-md-9">
                                 <label>Description</label>
@@ -107,6 +105,8 @@
         //document.querySelector("")
         $(document).ready(function () {
             var regionDropdownSelect = document.querySelector("#region-dropdown-select");
+            regionDropdownSelect.innerHTML = `<option value="" disabled selected>Select a region</option>`;
+
             $.ajax({
                 url: '/api/SelectListUtility/load-all-region',
                 type: 'GET',
@@ -121,8 +121,7 @@
                 error: function (xhr, status, error) {
                 }
             });
-            regionDropdownSelect.addEventListener('change', () =>
-            {
+            regionDropdownSelect.addEventListener('change', () => {
                 console.log(regionDropdownSelect.value)
                 var subRegionDropdownSelect = document.querySelector("#subregiondropdown-select");
                 subRegionDropdownSelect.innerHTML = "";
@@ -134,14 +133,14 @@
                     success: function (response) {
                         console.log(response);
                         Array.from(response).forEach(r => {
-                          subRegionDropdownSelect.innerHTML += `<option value="${r.id}">${r.name}</option>`
+                            subRegionDropdownSelect.innerHTML += `<option value="${r.id}">${r.name}</option>`
                         })
                     },
                     error: function (xhr, status, error) {
                     }
                 });
             })
-            
+
         })
     </script>
     <script>
@@ -198,10 +197,9 @@
                         }
                     },
                     columns: [
-                        { data: 'name', title: 'Name', width: '700px' },
-                        { data: 'displayId', title: 'Id', width: '350px' },
-                        { data: 'description', title: 'Description', width: '350px' },
-                        { data: 'subRegionRecordName', title: 'Sub-Region Record', width: '350px' },
+                        { data: 'regionName', width: '400px' },
+                        { data: 'subRegionRecordName', width: '450px' },
+                        { data: 'name', width: '400px' },
                         {
                             data: 'id',
                             "render": function (data, type, row) {

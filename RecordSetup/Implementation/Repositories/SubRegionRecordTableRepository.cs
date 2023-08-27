@@ -15,12 +15,16 @@ namespace RecordSetup.Implementation.Repositories
 
         public async Task<List<SubRegionRecordTable>> GetAllSubregionRecordTable()
         {
-            return await _context.SubRegionRecordTables.Include(x=>x.SubRegionRecord).ToListAsync();
+            return await _context.SubRegionRecordTables.Include(x=>x.SubRegionRecord).ThenInclude(x=>x.Region).ToListAsync();
+        }
+        public async Task<List<SubRegionRecordTable>> GetAllSubregionRecordByRegionIdTable(Guid? id)
+        {
+            return await _context.SubRegionRecordTables.Include(x=>x.SubRegionRecord).ThenInclude(x=>x.Region).Where(x=>x.SubRegionRecord.Id == id).ToListAsync();
         }
 
         public async Task<SubRegionRecordTable> GetSubregionRecordTable(Guid id)
         {
-            return await _context.SubRegionRecordTables.Include(x => x.SubRegionRecord).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.SubRegionRecordTables.Include(x => x.SubRegionRecord).ThenInclude(x=>x.Region).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
 

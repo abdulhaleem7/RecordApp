@@ -10,5 +10,6 @@ namespace RecordSetup.Interface.Servicies
         Task<BaseResponse<SubRegionRecordTableDto>> Get(Guid id);
         Task<BaseResponse<IEnumerable<SubRegionRecordTableDto>>> GetAll();
         Task<BaseResponse<SubRegionRecordTableDto>> Update(Guid id, SubRegionRecordTableRequestModel requestModel);
+        Task<BaseResponse<IEnumerable<SubRegionRecordTableDto>>> GetAllSubregionRecordByRegionIdTable(Guid? id);
     }
 }

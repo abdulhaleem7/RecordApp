@@ -34,29 +34,30 @@
                  Table Schema Data
             </h3>
         </div>
-
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th scope="row" class="col-sm-4">Region</th>
+                        <td class="col-sm-8">@Model.RegionName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="col-sm-4">Country</th>
+                        <td class="col-sm-8">@Model.SubRegionRecordName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="col-sm-4">Table</th>
+                        <td class="col-sm-8">@Model.SubRegionRecordTableName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="col-sm-4">Name</th>
+                        <td class="col-sm-8">@Model.Name</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="card-body">
             <form id="editForm" asp-action="Update" asp-route-id="@Model.Id">
-                <div class="flex-column div-info">
-                    <div class="form-group">
-                        <div>
-                            <dt class="col-sm-4">Display Id</dt>
-                            <dd class="col-sm-8">@Model.DisplayId</dd>
-                        </div>
-                        <div>
-                            <dt class="col-sm-4">ID:</dt>
-                            <dd class="col-sm-8">@Model.Id</dd>
-                        </div>
-                        <dt class="col-sm-4">Sub-Region Record Table:</dt>
-                        <dd class="col-sm-8">@Model.SubRegionRecordTableName</dd>
-                    </div>
-                    <div class="form-group">
-                        <dt class="col-sm-4">Sub-Region Record:</dt>
-                        <dd class="col-sm-8">@Model.SubRegionRecordName</dd>
-                        <dt class="col-sm-4">Region:</dt>
-                        <dd class="col-sm-8">@Model.RegionName</dd>
-                    </div>
-                </div>
                 
                 <div class="form-group">
                     <label>Name</label>

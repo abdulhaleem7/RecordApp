@@ -49,7 +49,8 @@ namespace RecordSetup.Implementation.Servicies
                 Description = region.Description,
                 SubRegionRecordName = region.SubRegionRecord.Name,
                 SubRegionRecordId = region.SubRegionRecordId,
-                DisplayId = region.Id.ToString()[..11]
+                DisplayId = region.Id.ToString()[..11],
+                RegionName = region.SubRegionRecord?.Region?.Name
             };
             return new BaseResponse<SubRegionRecordTableDto>
             {
@@ -77,7 +78,33 @@ namespace RecordSetup.Implementation.Servicies
                 SubRegionRecordName = x.SubRegionRecord.Name,
                 SubRegionRecordId = x.SubRegionRecordId,
                 Id = x.Id,
-                DisplayId = x.Id.ToString()[..11]
+                DisplayId = x.Id.ToString()[..11],
+                RegionName = x.SubRegionRecord.Region.Name
+                
+            });
+            return new BaseResponse<IEnumerable<SubRegionRecordTableDto>> { Data = result, Status = true, Message = "Sub-Region Record Tables Successfully Retrieved" };
+        }
+         public async Task<BaseResponse<IEnumerable<SubRegionRecordTableDto>>> GetAllSubregionRecordByRegionIdTable(Guid? id)
+        {
+            var getall = await _subRegionRecordTableRepository.GetAllSubregionRecordByRegionIdTable(id);
+            if (getall == null)
+            {
+                return new BaseResponse<IEnumerable<SubRegionRecordTableDto>>
+                {
+                    Message = "No record Found",
+                    Status = false
+                };
+            }
+            var result = getall.Select(x => new SubRegionRecordTableDto
+            {
+                Name = x.Name,
+                Description = x.Description,
+                SubRegionRecordName = x.SubRegionRecord.Name,
+                SubRegionRecordId = x.SubRegionRecordId,
+                Id = x.Id,
+                DisplayId = x.Id.ToString()[..11],
+                RegionName = x.SubRegionRecord.Region.Name
+                
             });
             return new BaseResponse<IEnumerable<SubRegionRecordTableDto>> { Data = result, Status = true, Message = "Sub-Region Record Tables Successfully Retrieved" };
         }
